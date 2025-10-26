@@ -1,0 +1,57 @@
+import SimpleLightbox from "simplelightbox";
+// Додатковий імпорт стилів
+import "simplelightbox/dist/simple-lightbox.min.css";
+import iziToast from "izitoast";
+// Додатковий імпорт стилів
+import "izitoast/dist/css/iziToast.min.css";
+
+
+const loader = document.querySelector('.loader');
+export const gallery = document.querySelector('.gallery');
+const lightbox = new SimpleLightbox('.gallery-link', {
+    captionsData: "alt",
+    captionPosition: "bottom",
+    captionDelay: 250
+});
+
+export function createGallery(images) {
+    const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
+    <li class="gallery-item">
+        <a class="gallery-link" href="${largeImageURL}">
+            <img class="gallery-image" src="${webformatURL}" alt="${tags}" />
+        </a>
+        <div class="gallery-image-data">
+            <p class="data-text"><span class="bold">Likes</span> ${likes}</p>
+            <p class="data-text"><span class="bold">Views</span> ${views}</p>
+            <p class="data-text"><span class="bold">Comments</span> ${comments}</p>
+            <p class="data-text"><span class="bold">Downloads</span> ${downloads}</p>
+        </div>
+    </li>`)
+        .join('');
+    gallery.insertAdjacentHTML('beforeend', markup);    
+    lightbox.refresh()
+}
+
+export function messageError() {
+    iziToast.show({
+        title: 'Sorry',
+        message: ', there are no images matching your search query. Please try again!',
+        position: `topRight`,
+        messageColor: '#fffc3aff',
+        backgroundColor: "#ec3939",
+    });
+}
+
+export function clearGallery() {
+    gallery.innerHTML = '';
+}
+
+export function showLoader() {
+    loader.classList.remove('hidden');
+}
+
+export function hideLoader() {
+    loader.classList.add('hidden');
+}
+
+

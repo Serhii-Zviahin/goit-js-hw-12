@@ -1,8 +1,11 @@
 /* Styles for Mobile devices */
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 320px;
   max-width: 375px;
-  margin: 0 auto;
+  margin: 10px auto;
   padding: 0 16px;
 }
 /* Styles for Tablet devices */
@@ -23,12 +26,13 @@
   justify-content: center;
   gap: 8px;
 }
-.form button {
+.form button,
+.js-load-more {
   font-family: 'Montserrat';
   background: #4e75ff;
   border-radius: 8px;
   padding: 8px 16px;
-  max-width: 91px;
+  /* max-width: 91px; */
   max-height: 40px;
   border: none;
   font-weight: 500;
@@ -38,6 +42,7 @@
   color: #fff;
   text-align: center;
 }
+
 .form input {
   min-width: 272px;
   min-height: 40px;
@@ -58,8 +63,12 @@
 .form input:focus {
   border-color: #4e75ff;
 }
-.form button:hover {
+.form button:hover,
+.js-load-more:hover {
   background-color: #6c8cff;
+}
+.js-load-more {
+  margin-top: 30px;
 }
 
 /* Loader start */
