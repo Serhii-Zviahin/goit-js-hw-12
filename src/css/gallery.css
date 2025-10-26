@@ -1,0 +1,56 @@
+.data-text {
+  font-family: 'Montserrat';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 200%;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.bold {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 133%;
+  letter-spacing: 0.04em;
+  color: #2e2f42;
+}
+.gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 72px 24px;
+  width: 1128px;
+  margin: 32px auto 36px;
+}
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  box-sizing: border-box;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #808080;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.gallery-item:hover {
+  transition: all 200ms ease-in;
+  transform: scale(1.04);
+}
+.gallery li {
+  width: calc((100% - 48px) / 3);
+  height: 200px;
+}
+.gallery-image-data {
+  height: 48px;
+  bottom: 120px;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #808080;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
