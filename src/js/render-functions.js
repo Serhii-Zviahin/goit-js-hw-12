@@ -56,10 +56,10 @@ export function hideLoader() {
 }
 
 export function showLoadMoreButton() {
-        loadMore.classList.replace('hidden', 'js-load-more-images');
+        loadMore.classList.remove('hidden');
 } 
 
-export function hideLoadMoreButton() {
-        loadMore.classList.replace('js-load-more-images', 'hidden');
+export function hideLoadMoreButton() {    
+        loadMore.classList.add('hidden');
 }
 

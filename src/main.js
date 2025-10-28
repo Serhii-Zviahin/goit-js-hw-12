@@ -5,11 +5,12 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const form = document.querySelector('.form');
 const imageInput = form.querySelector('input[name="search-text"]');
-hideLoadMoreButton();
 
 form.addEventListener('submit', handleSubmit);
-const loadMore = document.querySelector('.js-load-more-images');
+const loadMore = document.querySelector('.js-load-more');
 loadMore.addEventListener('click', onLoadMore);
+
+hideLoadMoreButton();
 
 let page = 1;
 let queryWord = '';
