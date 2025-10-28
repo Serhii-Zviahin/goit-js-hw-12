@@ -13,6 +13,7 @@ const lightbox = new SimpleLightbox('.gallery-link', {
     captionPosition: "bottom",
     captionDelay: 250
 });
+const loadMore = document.querySelector('.js-load-more');
 
 export function createGallery(images) {
     const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
@@ -54,4 +55,11 @@ export function hideLoader() {
     loader.classList.add('hidden');
 }
 
+export function showLoadMoreButton() {
+        loadMore.classList.replace('hidden', 'js-load-more-images');
+} 
+
+export function hideLoadMoreButton() {
+        loadMore.classList.replace('js-load-more-images', 'hidden');
+}
 
