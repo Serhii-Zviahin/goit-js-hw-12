@@ -70,7 +70,7 @@ export function showLoadMoreButton() {
 export function hideLoadMoreButton() {    
         loadMore.classList.add('hidden');
 }
-export function endSearchResults() {
+export function messageEndSearch() {
     iziToast.show({
                 message: "We're sorry, but you've reached the end of search results",
                 position: `topRight`,

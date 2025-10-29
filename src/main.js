@@ -1,5 +1,5 @@
 import { getImagesByQuery } from "./js/pixabay-api";
-import { clearGallery, createGallery, endSearchResults, hideLoader, hideLoadMoreButton, messageError, showLoader, showLoadMoreButton } from "./js/render-functions";
+import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, messageEndSearch, messageError, showLoader, showLoadMoreButton } from "./js/render-functions";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -46,10 +46,6 @@ function handleSubmit(event) {
                 createGallery(images.hits);
                 showLoadMoreButton();
             }
-            if (images.hits.length < 15) {
-                hideLoadMoreButton();
-                endSearchResults();
-            }
             else {
                 iziToast.show({
                     message: 'Image not found',
@@ -57,9 +53,18 @@ function handleSubmit(event) {
                     messageColor: '#fffc3aff',
                     backgroundColor: "#ec3939",
                 });
-                }
-        } catch (error) {
-            messageError();
+            }
+            if (images.hits.length < 15) {
+                hideLoadMoreButton();
+                messageEndSearch();
+            }
+        } catch(error) {
+            iziToast.show({
+                message: error.message,
+                position: `topRight`,
+                messageColor: '#fffc3aff',
+                backgroundColor: "#ec3939",
+            });      
             event.target.reset();
         } finally {
             hideLoader();
@@ -78,7 +83,7 @@ async function onLoadMore() {
         const totalPage = Math.ceil(data.totalHits / data.hits.length);
         if (page >= totalPage) {
             hideLoadMoreButton();
-            endSearchResults();
+            messageEndSearch(); 
         }
             const card = document.querySelector('.gallery-item');
             const info = card.getBoundingClientRect();
