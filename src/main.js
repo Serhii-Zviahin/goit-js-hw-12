@@ -1,5 +1,5 @@
 import { getImagesByQuery } from "./js/pixabay-api";
-import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, showLoader, showLoadMoreButton } from "./js/render-functions";
+import { clearGallery, createGallery, endSearchResults, hideLoader, hideLoadMoreButton, messageError, showLoader, showLoadMoreButton } from "./js/render-functions";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -44,25 +44,22 @@ function handleSubmit(event) {
             const images = await getImagesByQuery(queryWord, page);
             if (images.hits.length > 0) {
                 createGallery(images.hits);
-                hideLoader();
                 showLoadMoreButton();
-            } else {
+            }
+            if (images.hits.length < 15) {
+                hideLoadMoreButton();
+                endSearchResults();
+            }
+            else {
                 iziToast.show({
-                    message: 'Image did not find',
+                    message: 'Image not found',
                     position: `topRight`,
                     messageColor: '#fffc3aff',
                     backgroundColor: "#ec3939",
                 });
-                hideLoader();
-            }
+                }
         } catch (error) {
-            iziToast.show({
-                message: error.message,
-                position: `topRight`,
-                messageColor: '#fffc3aff',
-                backgroundColor: "#ec3939",
-            });
-            hideLoader();
+            messageError();
             event.target.reset();
         } finally {
             hideLoader();
@@ -77,17 +74,11 @@ async function onLoadMore() {
     try {
         showLoader();
         const data = await getImagesByQuery(queryWord, page);
-        hideLoader();
         createGallery(data.hits);
         const totalPage = Math.ceil(data.totalHits / data.hits.length);
         if (page >= totalPage) {
             hideLoadMoreButton();
-            iziToast.show({
-                message: "We're sorry, but you've reached the end of search results",
-                position: `topRight`,
-                messageColor: '#fffc3aff',
-                backgroundColor: "#394becb4",
-            });
+            endSearchResults();
         }
             const card = document.querySelector('.gallery-item');
             const info = card.getBoundingClientRect();
@@ -97,13 +88,9 @@ async function onLoadMore() {
                 behavior: 'smooth'
             })
     } catch (error) {
-        iziToast.show({
-        message: error.message,
-        position: `topRight`,
-        messageColor: '#fffc3aff',
-        backgroundColor: "#ec3939",
-    })
+        messageError();
     } finally {
-        loadMore.disabled = false;;
+        loadMore.disabled = false;
+        hideLoader();
     }
 }

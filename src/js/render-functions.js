@@ -33,10 +33,18 @@ export function createGallery(images) {
     lightbox.refresh()
 }
 
-export function messageError() {
+export function messageNoImages() {
     iziToast.show({
         title: 'Sorry',
         message: ', there are no images matching your search query. Please try again!',
+        position: `topRight`,
+        messageColor: '#fffc3aff',
+        backgroundColor: "#ec3939",
+    });
+}
+export function messageError() {
+    iziToast.show({
+        message: error.message,
         position: `topRight`,
         messageColor: '#fffc3aff',
         backgroundColor: "#ec3939",
@@ -62,4 +70,11 @@ export function showLoadMoreButton() {
 export function hideLoadMoreButton() {    
         loadMore.classList.add('hidden');
 }
-
+export function endSearchResults() {
+    iziToast.show({
+                message: "We're sorry, but you've reached the end of search results",
+                position: `topRight`,
+                messageColor: '#fffc3aff',
+                backgroundColor: "#394becb4",
+            });
+}
