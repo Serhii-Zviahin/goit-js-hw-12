@@ -1,7 +1,5 @@
-import { getImagesByQuery } from "./js/pixabay-api";
-import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, messageEndSearch, messageError, showLoader, showLoadMoreButton } from "./js/render-functions";
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
+import { getImagesByQuery, per_page } from "./js/pixabay-api";
+import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, messageEndSearch,  messageNotImage,  messageNotInput,  messageSomethingWrong, showLoader, showLoadMoreButton } from "./js/render-functions";
 
 const form = document.querySelector('.form');
 const imageInput = form.querySelector('input[name="search-text"]');
@@ -12,34 +10,26 @@ loadMore.addEventListener('click', onLoadMore);
 
 hideLoadMoreButton();
 
-let page = 1;
-let queryWord = '';
+let page;
+let queryWord;
 
-function handleSubmit(event) {
+
+async function handleSubmit(event) {
     event.preventDefault();
-
+    clearGallery();
+    showLoader();
+    hideLoadMoreButton();
+    
+    page = 1;
     queryWord = imageInput.value;
     
     if (!queryWord.trim().length) {   
-        iziToast.show({
-            message: 'Input field is empty',
-            position: `topRight`,
-            messageColor: '#fffc3aff',
-            backgroundColor: "#ec3939",
-        });
+        messageNotInput();
         hideLoader();
+        form.reset();
         return; 
     }
 
-    clearGallery();
-    showLoader();
-
-    page = 1;
-    
-    hideLoadMoreButton();
-    getImages();
-
-    async function getImages() {
         try {
             const images = await getImagesByQuery(queryWord, page);
             if (images.hits.length > 0) {
@@ -47,29 +37,18 @@ function handleSubmit(event) {
                 showLoadMoreButton();
             }
             else {
-                iziToast.show({
-                    message: 'Image not found',
-                    position: `topRight`,
-                    messageColor: '#fffc3aff',
-                    backgroundColor: "#ec3939",
-                });
+                messageNotImage();
             }
-            if (images.hits.length < 15) {
+            if (images.hits.length < per_page) {
                 hideLoadMoreButton();
                 messageEndSearch();
             }
         } catch(error) {
-            iziToast.show({
-                message: error.message,
-                position: `topRight`,
-                messageColor: '#fffc3aff',
-                backgroundColor: "#ec3939",
-            });      
+            messageSomethingWrong();      
             event.target.reset();
         } finally {
             hideLoader();
         }
-    }
 }
 
 async function onLoadMore() {
@@ -80,7 +59,9 @@ async function onLoadMore() {
         showLoader();
         const data = await getImagesByQuery(queryWord, page);
         createGallery(data.hits);
-        const totalPage = Math.ceil(data.totalHits / data.hits.length);
+
+        const totalPage = Math.ceil(data.totalHits / per_page);
+
         if (page >= totalPage) {
             hideLoadMoreButton();
             messageEndSearch(); 
@@ -93,7 +74,9 @@ async function onLoadMore() {
                 behavior: 'smooth'
             })
     } catch (error) {
-        messageError();
+        page--;
+        showLoadMoreButton();
+        messageSomethingWrong();  
     } finally {
         loadMore.disabled = false;
         hideLoader();

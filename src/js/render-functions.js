@@ -42,14 +42,6 @@ export function messageNoImages() {
         backgroundColor: "#ec3939",
     });
 }
-export function messageError() {
-    iziToast.show({
-        message: error.message,
-        position: `topRight`,
-        messageColor: '#fffc3aff',
-        backgroundColor: "#ec3939",
-    });
-}
 
 export function clearGallery() {
     gallery.innerHTML = '';
@@ -77,4 +69,26 @@ export function messageEndSearch() {
                 messageColor: '#fffc3aff',
                 backgroundColor: "#394becb4",
             });
+}
+export function messageNotImage() {
+    iziToast.show({
+                    message: 'Image not found',
+                    position: `topRight`,
+                    messageColor: '#fffc3aff',
+                    backgroundColor: "#ec3939",
+                })
+}
+export function messageNotInput() {
+    iziToast.show({
+            message: 'Input field is empty',
+            position: `topRight`,
+            messageColor: '#fffc3aff',
+            backgroundColor: "#ec3939",
+        })
+}
+export function messageSomethingWrong() {
+    iziToast.error({
+            message: 'Sorry, something went wrong. Please try again!',
+            position: "topRight",
+        })
 }

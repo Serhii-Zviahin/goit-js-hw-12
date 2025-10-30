@@ -6,6 +6,7 @@ import { messageNoImages } from "./render-functions";
 
 const url = "https://pixabay.com/api/";
 const myAPI_KEY = "52805725-7d516d36c1804a9cebba9806b";
+export const per_page = 15;
 
 export async function getImagesByQuery(queryWord, page = 1) {
     try {
@@ -17,7 +18,7 @@ export async function getImagesByQuery(queryWord, page = 1) {
                 orientation: 'horizontal',
                 safesearch: true,
                 page,
-                per_page: 15
+                per_page
             }
         });
         if (response.data.hits.length > 0) {
