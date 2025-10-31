@@ -39,7 +39,7 @@ async function handleSubmit(event) {
             else {
                 messageNotImage();
             }
-            if (images.hits.length < per_page) {
+            if (images.hits.length < per_page || images.totalHits < per_page) {
                 hideLoadMoreButton();
                 messageEndSearch();
             }
@@ -75,7 +75,6 @@ async function onLoadMore() {
             })
     } catch (error) {
         page--;
-        showLoadMoreButton();
         messageSomethingWrong();  
     } finally {
         loadMore.disabled = false;
