@@ -1,5 +1,5 @@
 import { getImagesByQuery, per_page } from "./js/pixabay-api";
-import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, messageEndSearch,  messageNotImage,  messageNotInput,  messageSomethingWrong, showLoader, showLoadMoreButton } from "./js/render-functions";
+import { clearGallery, createGallery, hideLoader, hideLoadMoreButton, messageEndSearch,  messageNoImages,  messageNotImage,  messageNotInput,  messageSomethingWrong, showLoader, showLoadMoreButton } from "./js/render-functions";
 
 const form = document.querySelector('.form');
 const imageInput = form.querySelector('input[name="search-text"]');
@@ -12,7 +12,7 @@ hideLoadMoreButton();
 
 let page;
 let queryWord;
-
+let totalPages;
 
 async function handleSubmit(event) {
     event.preventDefault();
@@ -20,7 +20,7 @@ async function handleSubmit(event) {
     showLoader();
     hideLoadMoreButton();
     
-    page = 1;
+    page = 31;
     queryWord = imageInput.value;
     
     if (!queryWord.trim().length) {   
@@ -32,20 +32,28 @@ async function handleSubmit(event) {
 
         try {
             const images = await getImagesByQuery(queryWord, page);
-            if (images.hits.length > 0) {
-                createGallery(images.hits);
-                showLoadMoreButton();
+            hideLoader();
+            if (!images.totalHits) {
+                messageNoImages(); 
+                return;
             }
-            else {
-                messageNotImage();
-            }
-            if (images.hits.length < per_page || images.totalHits < per_page) {
-                hideLoadMoreButton();
+
+            totalPages = Math.ceil(images.totalHits / per_page);
+console.log(totalPages);
+
+            createGallery(images.hits);
+            form.reset();
+            
+            if (page >= totalPages) {
                 messageEndSearch();
+                return;
             }
+            
+            showLoadMoreButton();
+        
         } catch(error) {
-            messageSomethingWrong();      
-            event.target.reset();
+            messageSomethingWrong();
+            
         } finally {
             hideLoader();
         }
@@ -59,23 +67,29 @@ async function onLoadMore() {
         showLoader();
         const data = await getImagesByQuery(queryWord, page);
         createGallery(data.hits);
+console.log(totalPages);
+console.log(page);
 
-        const totalPage = Math.ceil(data.totalHits / per_page);
-
-        if (page >= totalPage) {
-            hideLoadMoreButton();
+        if (page >= totalPages) {
             messageEndSearch(); 
+            hideLoadMoreButton();
+            return;
         }
-            const card = document.querySelector('.gallery-item');
-            const info = card.getBoundingClientRect();
-            const heightCard = info.height;
-            window.scrollBy({
-                top: heightCard * 2,
-                behavior: 'smooth'
-            })
+
+        showLoadMoreButton();
+
+        const card = document.querySelector('.gallery-item');
+        const info = card.getBoundingClientRect();
+        const heightCard = info.height;
+        window.scrollBy({
+            top: heightCard * 2,
+            behavior: 'smooth'
+        });
+
     } catch (error) {
         page--;
         messageSomethingWrong();  
+
     } finally {
         loadMore.disabled = false;
         hideLoader();
