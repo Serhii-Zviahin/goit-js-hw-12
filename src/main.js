@@ -20,7 +20,7 @@ async function handleSubmit(event) {
     showLoader();
     hideLoadMoreButton();
     
-    page = 31;
+    page = 1;
     queryWord = imageInput.value;
     
     if (!queryWord.trim().length) {   
