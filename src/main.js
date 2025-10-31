@@ -39,7 +39,6 @@ async function handleSubmit(event) {
             }
 
             totalPages = Math.ceil(images.totalHits / per_page);
-console.log(totalPages);
 
             createGallery(images.hits);
             form.reset();
@@ -67,8 +66,6 @@ async function onLoadMore() {
         showLoader();
         const data = await getImagesByQuery(queryWord, page);
         createGallery(data.hits);
-console.log(totalPages);
-console.log(page);
 
         if (page >= totalPages) {
             messageEndSearch(); 
